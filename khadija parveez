@@ -1,0 +1,218 @@
+drop table departments;
+drop table students;
+
+create table departments(
+department_id int primary key,
+department_name varchar(50)
+);
+drop table address;
+create table address(
+address_id int primary key,
+street_address varchar(50) not null,
+city varchar(20),
+state varchar(20),
+postal_code int);
+drop table students;
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    first_name VARCHAR(10),
+    last_name VARCHAR(10),
+    birthdate DATE,
+    department_id INT,
+    address_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id),
+    FOREIGN KEY (address_id) REFERENCES Address(address_id)
+);
+INSERT INTO Departments (department_id, department_name) VALUES (1, 'Computer Science');
+INSERT INTO Departments (department_id, department_name) VALUES (2, 'Mechanical Engineering');
+INSERT INTO Departments (department_id, department_name) VALUES (3, 'Electrical Engineering');
+INSERT INTO Departments (department_id, department_name) VALUES (4, 'Civil Engineering');
+INSERT INTO Departments (department_id, department_name) VALUES (5, 'Mathematics');
+INSERT INTO Departments (department_id, department_name) VALUES (6, 'Biology');
+
+INSERT INTO Address (address_id, street_address, city, state, postal_code) VALUES (1, '123 Elm St', 'Springfield', 'IL', '62701');
+INSERT INTO Address (address_id, street_address, city, state, postal_code) VALUES (2, '456 Oak St', 'Decatur', 'IL', '62521');
+INSERT INTO Address (address_id, street_address, city, state, postal_code) VALUES (3, '789 Pine St', 'Champaign', 'IL', '61820');
+INSERT INTO Address (address_id, street_address, city, state, postal_code) VALUES (4, '102 Birch Rd', 'Peoria', 'IL', '61602');
+INSERT INTO Address (address_id, street_address, city, state, postal_code) VALUES (5, '205 Cedar Ave', 'Chicago', 'IL', '60601');
+INSERT INTO Address (address_id, street_address, city, state, postal_code) VALUES (6, '310 Maple Dr', 'Urbana', 'IL', '61801');
+INSERT INTO Address (address_id, street_address, city, state, postal_code) VALUES (7, '415 Oak Blvd', 'Champaign', 'IL', '61821');
+INSERT INTO Address (address_id, street_address, city, state, postal_code) VALUES (8, '520 Pine Rd', 'Carbondale', 'IL', '62901');
+
+INSERT IGNORE INTO Address (address_id, street_address, city, state, postal_code)VALUES (8, '520 Pine Rd', 'Carbondale', 'IL', '62901');
+
+INSERT INTO Students (student_id, first_name, last_name, birthdate, department_id, address_id) VALUES(1, 'John', 'Doe', '1995-04-15', 1, 1);
+INSERT INTO Students (student_id, first_name, last_name, birthdate, department_id, address_id) VALUES(2, 'Jane', 'Smith', '1996-07-22', 2,2);
+INSERT INTO Students (student_id, first_name, last_name, birthdate, department_id, address_id) VALUES(3, 'Alice', 'Johnson', '1994-11-30',3, 3);
+INSERT INTO Students (student_id, first_name, last_name, birthdate, department_id, address_id) VALUES(4, 'Michael', 'Brown', '1997-02-19', 4,4);
+INSERT INTO Students (student_id, first_name, last_name, birthdate, department_id, address_id) VALUES(5, 'Sophia', 'Davis', '1998-01-05', 5, 5);
+INSERT INTO Students (student_id, first_name, last_name, birthdate, department_id, address_id) VALUES(6, 'Daniel', 'Wilson', '1995-06-10', 6, 6);
+INSERT INTO Students (student_id, first_name, last_name, birthdate, department_id, address_id) VALUES(7, 'Olivia', 'Martinez', '1997-11-25', 1, 7);
+INSERT INTO Students (student_id, first_name, last_name, birthdate, department_id, address_id) VALUES(8, 'Ethan', 'Miller', '1996-03-30', 2, 8);
+
+SELECT COUNT(*) total_students FROM Students;
+
+SELECT d.department_name
+FROM Students s
+JOIN Departments d ON s.department_id = d.department_id
+WHERE s.first_name = 'John';
+
+SELECT 
+    d.department_name,
+    COUNT(s.student_id) AS student_count
+FROM 
+    Departments d
+JOIN 
+    Students s ON d.department_id = s.department_id
+GROUP BY 
+    d.department_id, d.department_name;
+    
+    SELECT 
+    s.student_id,
+    s.first_name,
+    s.last_name,
+    d.department_name,
+    a.street_address,
+    a.city,
+    a.state,
+    a.postal_code
+FROM 
+    Students s
+JOIN 
+    Departments d ON s.department_id = d.department_id
+JOIN 
+    Address a ON s.address_id = a.address_id;
+
+SELECT 
+    s.student_id,
+    s.first_name,
+    s.last_name,
+    d.department_name
+FROM 
+    Students s
+JOIN 
+    Departments d ON s.department_id = d.department_id
+WHERE 
+    d.department_name = 'Computer Science';
+    
+    UPDATE Address 
+SET city = 'New York'
+WHERE address_id = (
+    SELECT address_id 
+    FROM Students 
+    WHERE first_name = 'Jane'
+);
+DELETE FROM Students
+WHERE student_id = 8;
+
+SELECT 
+    s.student_id,
+    s.first_name,
+    s.last_name,
+    d.department_name,
+    a.street_address,
+    a.city,
+    a.state,
+    a.postal_code
+FROM 
+    Students s
+JOIN 
+    Departments d ON s.department_id = d.department_id
+JOIN 
+    Address a ON s.address_id = a.address_id
+WHERE 
+    a.city = 'New York';
+    
+    SELECT 
+    d.department_name,
+    COUNT(s.student_id) AS student_count
+FROM 
+    Departments d
+JOIN 
+    Students s ON d.department_id = s.department_id
+GROUP BY 
+    d.department_id, d.department_name;
+    
+SELECT 
+    s.student_id,
+    s.first_name,
+    s.last_name,
+    a.city
+FROM 
+    Students s
+JOIN 
+    Address a ON s.address_id = a.address_id
+WHERE 
+    a.city = 'Springfield';
+
+
+select 
+student_id ,
+first_name,
+last_name,
+birthdate 
+from 
+students 
+where 
+birthdate = 2;
+    
+select
+d.department_id,
+d.department_name,
+a.address_id,
+a.street_address,
+a.city,
+a.state,
+a.postal_code
+from 
+students s
+join 
+address a on s.address_id= a.address_id
+join 
+departments d on s.department_id = d.department_id
+where 
+student_id = 1;    
+
+SELECT 
+    student_id,
+    first_name,
+    last_name,
+    birthdate
+FROM 
+    Students
+WHERE 
+    birthdate BETWEEN '1995-01-01' AND '1998-12-31';
+    
+
+SELECT 
+    d.department_name,
+    COUNT(s.student_id) AS student_count
+FROM 
+    Students s
+JOIN 
+    Departments d ON s.department_id = d.department_id
+JOIN 
+    Address a ON s.address_id = a.address_id
+WHERE 
+    a.city = 'Champaign'
+GROUP BY 
+    d.department_name;
+    
+    SELECT 
+    s.first_name,
+    s.last_name,
+    a.street_address
+FROM 
+    Students s
+JOIN 
+    Address a ON s.address_id = a.address_id
+WHERE 
+    a.street_address = 'Pine street';
+
+UPDATE Students
+SET department_id = (
+    SELECT department_id 
+    FROM Departments
+    WHERE department_name = 'Mechanical Engineering'
+)
+WHERE student_id = 6;
